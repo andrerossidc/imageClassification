@@ -1,6 +1,7 @@
 """""
 04/2019
 Mateus Roder
+GBRBM Class with Data-Based Adaptive Temperature.
 ----------------------------------------------------------------------------------------
 Gaussian-Bernoulli - Restricted Boltzmann Machines, implementation from Hinton's paper:
 > Geoffrey Hinton, A Practical Guide to Training Restricted Boltzmann Machines, 2010.
