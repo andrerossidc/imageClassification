@@ -1,15 +1,5 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[4]:
-
-
 import matplotlib.pyplot as plt
 import numpy as np
-
-
-# In[5]:
-
 
 def grafico(media_SVM, des_SVM, media_RNA, des_RNA, extractor_name, y_label):
     n_cd= 2 #Numero de casas decimais na label
@@ -54,10 +44,6 @@ def grafico(media_SVM, des_SVM, media_RNA, des_RNA, extractor_name, y_label):
 
     plt.show()
 
-
-# In[6]:
-
-
 def imprime_matriz(matriz):
 
     linhas = len(matriz)
@@ -70,4 +56,3 @@ def imprime_matriz(matriz):
             else:
                 print("%d" %matriz[i][j], end = "\t")
     print()
-
