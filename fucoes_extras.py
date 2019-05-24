@@ -42,6 +42,7 @@ def grafico(media_SVM, des_SVM, media_RNA, des_RNA, extractor_name, y_label):
     autolabel(rects1, "left")
     autolabel(rects2, "right")
 
+    plt.setp(ax.get_xticklabels(), rotation=30, ha="right")
     plt.show()
 
 def imprime_matriz(matriz):

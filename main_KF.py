@@ -21,7 +21,7 @@ diretorio= os.getcwd()+"/dados_csv/" #Busca o diretorio automaticamente
 
 #Parametros p/ SVM
 C= 1.0
-gamma= 'scale'
+gamma= 'auto'
 kernel= 'rbf'
 
 #Parametros p/ RNA
