@@ -1,10 +1,12 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
-def grafico(media_SVM, des_SVM, media_RNA, des_RNA, extractor_name, y_label):
+def grafico(media_SVM, des_SVM, media_RNA, des_RNA, extractor_name, y_label, name):
+
     n_cd= 2 #Numero de casas decimais na label
 
-    ind = np.arange(len(media_SVM))  # the x locations for the groups
+    ind = np.arange(len(media_SVM))  # the x locations for the gr   oups
     width = 0.35  # the width of the bars
 
     fig, ax = plt.subplots()
@@ -41,9 +43,10 @@ def grafico(media_SVM, des_SVM, media_RNA, des_RNA, extractor_name, y_label):
 
     autolabel(rects1, "left")
     autolabel(rects2, "right")
-
     plt.setp(ax.get_xticklabels(), rotation=30, ha="right")
-    plt.show()
+    plt.savefig(os.getcwd()+"/results/" + na    me + ".png")
+    #plt.show()
+
 
 def imprime_matriz(matriz):
 

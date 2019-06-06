@@ -13,8 +13,8 @@ from sklearn import metrics #Importando bibliotecas para avalicao da acuracia da
 
 def RNAs(x_train, y_train, x_test, y_test, lri, lr, hls, mi):
 
-    RNA= MLPClassifier(hidden_layer_sizes=hls, max_iter=mi, 
-                       learning_rate=lr,learning_rate_init=lri) #Parametros basicos para RNA
+    RNA= MLPClassifier(hidden_layer_sizes=hls, max_iter=mi,
+                       learning_rate=lr,learning_rate_init=lri, random_state=13) #Parametros basicos para RNA
     RNA.fit(x_train, y_train) #Treinado a RNA
     previsao= RNA.predict(x_test) #Testando a RNA
 
@@ -23,4 +23,3 @@ def RNAs(x_train, y_train, x_test, y_test, lri, lr, hls, mi):
     m_conf= metrics.confusion_matrix(y_test, previsao) #Matriz de confusao
 
     return acuracia, acuracia_b, m_conf #Retornar a acuracia, auc, acuracia balanceada, matriz de confusao
-
