@@ -1,51 +1,69 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+import seaborn as sns
+import matplotlib
 
-def grafico(media_SVM, des_SVM, media_RNA, des_RNA, extractor_name, y_label, name):
+def grafico(acur_SVM, des_SVM, acur_RNA, des_RNA, extractor_name, y_label, name):
 
-    n_cd= 2 #Numero de casas decimais na label
+    paleta = "Set2"
+    sns.set(palette=paleta)
+    sns.set_style("ticks", {'axes.edgecolor': '0','grid.color': '1'})
+    sns.set_context("paper")
 
-    ind = np.arange(len(media_SVM))  # the x locations for the gr   oups
-    width = 0.35  # the width of the bars
+    SMALL_SIZE = 10
+    MEDIUM_SIZE = 12
+    BIGGER_SIZE = 14
 
-    fig, ax = plt.subplots()
-    rects1 = ax.bar(ind - width/2, np.round(media_SVM,n_cd), width, yerr=np.round(des_SVM,n_cd),
-                    color='SkyBlue', label='SVM')
-    rects2 = ax.bar(ind + width/2, np.round(media_RNA,n_cd), width, yerr=np.round(des_RNA,n_cd),
-                    color='IndianRed', label='RNA')
+    plt.rc('font', size=SMALL_SIZE)          # controls default text sizes
+    plt.rc('axes', titlesize=BIGGER_SIZE)     # fontsize of the axes title
+    plt.rc('axes', labelsize=MEDIUM_SIZE)    # fontsize of the x and y labels
+    plt.rc('xtick', labelsize=MEDIUM_SIZE)    # fontsize of the tick labels
+    plt.rc('ytick', labelsize=MEDIUM_SIZE)    # fontsize of the tick labels
+    plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
+    plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 
-    # Add some text for labels, title and custom x-axis tick labels, etc.
-    ax.set_ylabel(y_label)
-    ax.set_title('Desempenhos')
-    ax.set_xticks(ind)
-    ax.set_xticklabels(extractor_name)
-    ax.legend()
+    labels = extractor_name
+    lab = []
 
+    i = 0
+    numerico = []
+    for val in labels:
+        lab.append(val+"  ("+str(i+1)+")")
+        numerico.append("("+str(i+1)+")")
+        i = i+1
 
-    def autolabel(rects, xpos='center'):
-        """
-        Attach a text label above each bar in *rects*, displaying its height.
+    a = np.round(acur_SVM,4)
+    a_dev = np.round(des_SVM,4)
+    b = np.round(acur_RNA,4)
+    b_dev = np.round(des_RNA,4)
 
-        *xpos* indicates which side to place the text w.r.t. the center of
-        the bar. It can be one of the following {'center', 'right', 'left'}.
-        """
+    bar_width = 0.25
+    data = [a,b]
 
-        xpos = xpos.lower()  # normalize the case of the parameter
-        ha = {'center': 'center', 'right': 'left', 'left': 'right'}
-        offset = {'center': 0.5, 'right': 0.57, 'left': 0.43}  # x_txt = x + w*off
+    colors = sns.color_palette(paleta)
+    columns = lab
 
-        for rect in rects:
-            height = rect.get_height()
-            ax.text(rect.get_x() + rect.get_width()*offset[xpos], 1.01*height,
-                    '{}'.format(height), ha=ha[xpos], va='bottom')
+    index = np.arange(len(labels))
+    plt.figure(figsize=(12,6))
+    plt.bar(index, a, bar_width, yerr=a_dev)
+    plt.bar(index+bar_width+.02, b, bar_width, yerr=b_dev)
 
+    table = plt.table(cellText=data,
+              rowLabels=[' SVM ', ' RNA '],
+              rowColours=colors,
+              colLabels=numerico,
+              loc='top',
+              bbox=[0, 1.15, 1, 0.2])
 
-    autolabel(rects1, "left")
-    autolabel(rects2, "right")
-    plt.setp(ax.get_xticklabels(), rotation=30, ha="right")
-    plt.savefig(os.getcwd()+"/results/" + na    me + ".png")
-    #plt.show()
+    table.auto_set_font_size(False)
+    table.set_fontsize(MEDIUM_SIZE)
+
+    plt.ylabel(y_label, fontsize=BIGGER_SIZE)
+    plt.xticks(index+0.15, lab)
+    plt.xticks(rotation=90)
+    plt.title('Desempenhos obtidos')
+    plt.savefig(os.getcwd()+"/results/" + name + ".png", bbox_inches='tight')
 
 
 def imprime_matriz(matriz):

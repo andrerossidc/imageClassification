@@ -110,18 +110,22 @@ for nome in listdir(diretorio):
 # In[10]:
 
 
-print("\033[1mMatrizes de confusao\033[0m\n")
+print("Gerando matrizes de confusao...")
+
+fs = open(os.getcwd()+"/results/matrix_svm.txt", "w")
+fr = open(os.getcwd()+"/results/matrix_rna.txt", "w")
 
 for i in range(0,len(extractor_name)):
-    print('\033[1m___'+extractor_name[i]+'\033[0m', "\n\nSVM")
-    fucoes_extras.imprime_matriz(matrizC_S[i])
-    print("RNA")
-    fucoes_extras.imprime_matriz(matrizC_R[i])
+    fs.writelines("\n **" + extractor_name[i] + "**\n")
+    fs.write("%s\n" % matrizC_S[i])
+    fr.writelines("\n **" + extractor_name[i] + "**\n")
+    fr.write("%s\n" % matrizC_R[i])
+    
+fs.close()
+fr.close()
 
+print("Gerando resultados graficos...")
+fucoes_extras.grafico(media_SVM, des_SVM, media_RNA, des_RNA, extractor_name, "Acuracia", "ac")
+fucoes_extras.grafico(mediaB_SVM, desB_SVM, mediaB_RNA, desB_RNA, extractor_name, "Acuracia balanceada", "acb")
 
-# In[11]:
-
-
-fucoes_extras.grafico(media_SVM, des_SVM, media_RNA, des_RNA, extractor_name, "Acuracia")
-fucoes_extras.grafico(mediaB_SVM, desB_SVM, mediaB_RNA, desB_RNA, extractor_name, "Acuracia balanceada")
-
+print("Processamento finalizado!")
