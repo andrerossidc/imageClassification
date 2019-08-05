@@ -19,14 +19,14 @@ import numpy as np
 
 diretorio= os.getcwd()+"/dados_csv/" #Busca o diretorio automaticamente
 
-#Parametros p/ SVM
+#Parametros para SVM
 C= 1.0
 gamma= 'auto'
 kernel= 'rbf'
 
-#Parametros p/ RNA
+#Parametros para RNA
 max_iter=300
-hidden_layer_sizes= (100,) #Testar (50, 50) e (100, 100)
+hidden_layer_sizes= (50,50) #Testar (50, 50) e (100, 100)
 learning_rate= 'constant'
 learning_rate_init= 0.01
 
@@ -129,3 +129,7 @@ fucoes_extras.grafico(media_SVM, des_SVM, media_RNA, des_RNA, extractor_name, "A
 fucoes_extras.grafico(mediaB_SVM, desB_SVM, mediaB_RNA, desB_RNA, extractor_name, "Acuracia balanceada", "acb")
 
 print("Processamento finalizado!")
+
+import os
+beep = lambda x: os.system("echo -n '\a';sleep 0.2;" * x)
+beep(5)
