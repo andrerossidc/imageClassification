@@ -33,23 +33,25 @@ def grafico(acur_SVM, des_SVM, acur_RNA, des_RNA, extractor_name, y_label, name)
         numerico.append("("+str(i+1)+")")
         i = i+1
 
-    a = np.round(acur_SVM,4)
-    a_dev = np.round(des_SVM,4)
-    b = np.round(acur_RNA,4)
-    b_dev = np.round(des_RNA,4)
+    a = np.round(acur_SVM,3)
+    a_dev = np.round(des_SVM,3)
+    b = np.round(acur_RNA,3)
+    b_dev = np.round(des_RNA,3)
 
     bar_width = 0.25
     data = [a,b]
+    # Format table numbers as string
+    tab = [['%.3f' % j for j in i] for i in data]
 
     colors = sns.color_palette(paleta)
     columns = lab
 
     index = np.arange(len(labels))
     plt.figure(figsize=(12,6))
-    plt.bar(index, a, bar_width, yerr=a_dev)
-    plt.bar(index+bar_width+.02, b, bar_width, yerr=b_dev)
+    plt.bar(index, a, bar_width, yerr=a_dev, label="SVM")
+    plt.bar(index+bar_width+.02, b, bar_width, yerr=b_dev, label="RNA")
 
-    table = plt.table(cellText=data,
+    table = plt.table(cellText=tab,
               rowLabels=[' SVM ', ' RNA '],
               rowColours=colors,
               colLabels=numerico,
@@ -62,7 +64,8 @@ def grafico(acur_SVM, des_SVM, acur_RNA, des_RNA, extractor_name, y_label, name)
     plt.ylabel(y_label, fontsize=BIGGER_SIZE)
     plt.xticks(index+0.15, lab)
     plt.xticks(rotation=90)
-    plt.title('Desempenhos obtidos')
+    #plt.title('Desempenhos obtidos')
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.1), shadow=True, ncol=2)
     plt.savefig(os.getcwd()+"/results/" + name + ".png", bbox_inches='tight')
 
 
