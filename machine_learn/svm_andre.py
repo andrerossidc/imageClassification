@@ -11,9 +11,9 @@ from sklearn import metrics #Importando bibliotecas para avalicao da acuracia da
 # In[2]:
 
 
-def SVM(x_train, y_train, x_test, y_test, c, g, k):
+def SVM(x_train, y_train, x_test, y_test, c, g, k, seed):
 
-    SVM= svm.SVC(C=c, gamma=g, kernel=k, random_state=13) #Parametros basicos para SVM
+    SVM= svm.SVC(C=c, gamma=g, kernel=k, random_state=seed) #Parametros basicos para SVM
     SVM.fit(x_train, y_train) #Treinado a SVM
     previsao= SVM.predict(x_test) #Testando a SVM
 

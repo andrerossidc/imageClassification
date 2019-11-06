@@ -56,6 +56,9 @@ extractor_name= []
 KF= KFold(n_splits=10, random_state=13, shuffle=True) #(n_folds, semente, ordenacao)
 
 for nome in listdir(diretorio):
+
+    cont = 0
+
     acur_RNA= []
     acur_SVM= []
 
@@ -75,18 +78,21 @@ for nome in listdir(diretorio):
     KF_data.to_csv('kfolds_data.csv') #Salvando em .csv
 
     for train_index, test_index in KF.split(x):
+
+        cont = cont + 1;
+
         x_train, x_test = x[train_index], x[test_index]
         y_train, y_test = y[train_index], y[test_index]
 
         #Treinando e avaliando o desempenho da SVM
-        S= svm_andre.SVM(x_train, y_train, x_test, y_test, C, gamma, kernel)
+        S= svm_andre.SVM(x_train, y_train, x_test, y_test, C, gamma, kernel, cont)
         acur_SVM.append(S[0]) #Lista de acuracias de todos os folds
         acurB_SVM.append(S[1]) #Lista de acuracias balanceadas de todos os folds
         matrizC_SVM.append(S[2]) #Lista de matrizes de confusao de todos os folds
 
         #Treinando e avaliando o desempenho da RNA
         R= rna_mlp.RNAs(x_train, y_train, x_test, y_test, learning_rate_init,
-                        learning_rate, hidden_layer_sizes, max_iter)
+                        learning_rate, hidden_layer_sizes, max_iter, cont)
         acur_RNA.append(R[0]) #Lista de acuracias de todos os folds
         acurB_RNA.append(R[1]) #Lista de acuracias balanceadas de todos os folds
         matrizC_RNA.append(R[2]) #Lista de matrizes de confusao de todos os folds
@@ -114,10 +120,10 @@ for nome in listdir(diretorio):
 
 acc_std_models = {'extractorName' : extractor_name,
     'acc_SVM': media_SVM, 'stdev_acc_SVM': des_SVM, 'acc_RNA': media_RNA, 'stdev_acc_RNA': des_RNA,
-    'acc_balanced_SVM' : mediaB_SVM, 'stdev_acc_balanced_SVM': desB_SVM, 'acc_balanced_RNA' : mediaB_RNA, 'stdev_acc_balanced_SVM': desB_RNA
+    'acc_balanced_SVM' : mediaB_SVM, 'stdev_acc_balanced_SVM': desB_SVM, 'acc_balanced_RNA' : mediaB_RNA, 'stdev_acc_balanced_RNA': desB_RNA
 }
 df = pd.DataFrame(acc_std_models, columns= ['extractorName', 'acc_SVM', 'stdev_acc_SVM', 'acc_RNA', 'stdev_acc_RNA',
-    'acc_balanced_SVM', 'stdev_acc_balanced_SVM', 'acc_balanced_RNA', 'stdev_acc_balanced_SVM'])
+    'acc_balanced_SVM', 'stdev_acc_balanced_SVM', 'acc_balanced_RNA', 'stdev_acc_balanced_RNA'])
 
 df.to_csv(os.getcwd()+'/results/summary_results.csv')
 

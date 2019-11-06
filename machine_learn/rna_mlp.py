@@ -11,10 +11,10 @@ from sklearn import metrics #Importando bibliotecas para avalicao da acuracia da
 # In[2]:
 
 
-def RNAs(x_train, y_train, x_test, y_test, lri, lr, hls, mi):
+def RNAs(x_train, y_train, x_test, y_test, lri, lr, hls, mi, seed):
 
     RNA= MLPClassifier(hidden_layer_sizes=hls, max_iter=mi,
-                       learning_rate=lr,learning_rate_init=lri, random_state=13) #Parametros basicos para RNA
+                       learning_rate=lr,learning_rate_init=lri, random_state=seed) #Parametros basicos para RNA
     RNA.fit(x_train, y_train) #Treinado a RNA
     previsao= RNA.predict(x_test) #Testando a RNA
 
