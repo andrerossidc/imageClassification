@@ -19,6 +19,9 @@ import numpy as np
 
 diretorio= os.getcwd()+"/dados_csv/" #Busca o diretorio automaticamente
 
+#Parametros K-fold Cross validation
+n_splits=10
+
 #Parametros para SVM
 C= 1.0
 gamma= 'auto'
@@ -50,23 +53,27 @@ matrizC_S= []
 
 extractor_name= []
 
-# In[9]:
+#Armazena as acurácias BALANCEADAS de todos os folds e arquivos
+allAcuraciaB = np.zeros((len(listdir(diretorio)),n_splits), dtype=np.float32)
 
-
-KF= KFold(n_splits=10, random_state=13, shuffle=True) #(n_folds, semente, ordenacao)
+KF= KFold(n_splits=n_splits, random_state=13, shuffle=True) #(n_folds, semente, ordenacao)
+i=-1
 
 for nome in listdir(diretorio):
 
     cont = 0
+    i = i+1
 
+    #Acuracia da RNA e SVM
     acur_RNA= []
     acur_SVM= []
-
+    #Acuracia BALANCEADA RNA e SVM
     acurB_RNA= []
     acurB_SVM= []
-
+    #Matrizes de confusao
     matrizC_RNA= []
     matrizC_SVM= []
+
 
     dados= genfromtxt((diretorio+nome), delimiter=',',skip_header=1)
 
@@ -97,16 +104,24 @@ for nome in listdir(diretorio):
         acurB_RNA.append(R[1]) #Lista de acuracias balanceadas de todos os folds
         matrizC_RNA.append(R[2]) #Lista de matrizes de confusao de todos os folds
 
+    #armazena a acuracia BALANCEADA de todos os folds
+    allAcuraciaB[i,:] = acurB_RNA
+    #print("Acuracias para " +  nome + "(cont="+str(cont)+"): " + str(allAcuraciaB))
+
+
+    #Media e desvio padrao da acuracia para SVM e RNA
     media_SVM.append(statistics.mean(acur_SVM))
     des_SVM.append(statistics.stdev(acur_SVM))
     media_RNA.append(statistics.mean(acur_RNA))
     des_RNA.append(statistics.stdev(acur_RNA))
 
+    #Media e desvio padrao da acuracia BALANCEADA para SVM e RNA
     mediaB_SVM.append(statistics.mean(acurB_SVM))
     desB_SVM.append(statistics.stdev(acurB_SVM))
     mediaB_RNA.append(statistics.mean(acurB_RNA))
     desB_RNA.append(statistics.stdev(acurB_RNA))
 
+    #Matrizes de confusao da SVM E RNA
     matrizC_S.append(np.sum(matrizC_SVM, axis=0))
     matrizC_R.append(np.sum(matrizC_RNA, axis=0))
 
@@ -117,6 +132,9 @@ for nome in listdir(diretorio):
 
 #w = pd.DataFrame(media_SVM)
 #w.to_csv("media")
+
+allBalancAcc = pd.DataFrame(data=allAcuraciaB, index=extractor_name, columns=["fold_"+str(i) for i in range(1,n_splits+1)])
+allBalancAcc.to_csv(os.getcwd()+"/results/allFoldsBalancAcc.csv")
 
 acc_std_models = {'extractorName' : extractor_name,
     'acc_SVM': media_SVM, 'stdev_acc_SVM': des_SVM, 'acc_RNA': media_RNA, 'stdev_acc_RNA': des_RNA,
