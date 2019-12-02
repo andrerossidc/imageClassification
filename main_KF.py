@@ -54,7 +54,8 @@ matrizC_S= []
 extractor_name= []
 
 #Armazena as acurácias BALANCEADAS de todos os folds e arquivos
-allAcuraciaB = np.zeros((len(listdir(diretorio)),n_splits), dtype=np.float32)
+allAcuraciaB_RNA = np.zeros((len(listdir(diretorio)),n_splits), dtype=np.float32)
+allAcuraciaB_SVM = np.zeros((len(listdir(diretorio)),n_splits), dtype=np.float32)
 
 KF= KFold(n_splits=n_splits, random_state=13, shuffle=True) #(n_folds, semente, ordenacao)
 i=-1
@@ -105,8 +106,9 @@ for nome in listdir(diretorio):
         matrizC_RNA.append(R[2]) #Lista de matrizes de confusao de todos os folds
 
     #armazena a acuracia BALANCEADA de todos os folds
-    allAcuraciaB[i,:] = acurB_RNA
-    #print("Acuracias para " +  nome + "(cont="+str(cont)+"): " + str(allAcuraciaB))
+    allAcuraciaB_RNA[i,:] = acurB_RNA
+    allAcuraciaB_SVM[i,:] = acurB_SVM
+    #print("Acuracias para " +  nome + "(cont="+str(cont)+"): " + str(allAcuraciaB_RNA))
 
 
     #Media e desvio padrao da acuracia para SVM e RNA
@@ -133,8 +135,11 @@ for nome in listdir(diretorio):
 #w = pd.DataFrame(media_SVM)
 #w.to_csv("media")
 
-allBalancAcc = pd.DataFrame(data=allAcuraciaB, index=extractor_name, columns=["fold_"+str(i) for i in range(1,n_splits+1)])
-allBalancAcc.to_csv(os.getcwd()+"/results/allFoldsBalancAcc.csv")
+allBalancAccRNA = pd.DataFrame(data=allAcuraciaB_RNA, index=extractor_name, columns=["fold_"+str(i) for i in range(1,n_splits+1)])
+allBalancAccRNA.to_csv(os.getcwd()+"/results/allFoldsBalancAccRNA.csv")
+
+allBalancAccSVM = pd.DataFrame(data=allAcuraciaB_SVM, index=extractor_name, columns=["fold_"+str(i) for i in range(1,n_splits+1)])
+allBalancAccSVM.to_csv(os.getcwd()+"/results/allFoldsBalancAccSVM.csv")
 
 acc_std_models = {'extractorName' : extractor_name,
     'acc_SVM': media_SVM, 'stdev_acc_SVM': des_SVM, 'acc_RNA': media_RNA, 'stdev_acc_RNA': des_RNA,
